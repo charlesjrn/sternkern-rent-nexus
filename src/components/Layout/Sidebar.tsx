@@ -32,7 +32,11 @@ const navigationItems: NavItem[] = [
   { label: 'Settings', icon: Settings, href: '/settings', roles: ['landlord'] },
 ];
 
-const Sidebar = () => {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const { user } = useAuth();
   const [activeItem, setActiveItem] = React.useState('/dashboard');
 
@@ -40,8 +44,13 @@ const Sidebar = () => {
     item.roles.includes(user?.role || '')
   );
 
+  const handleItemClick = (href: string) => {
+    setActiveItem(href);
+    if (onClose) onClose(); // Close mobile sidebar when item is clicked
+  };
+
   return (
-    <div className="w-64 bg-card border-r border-border h-screen flex flex-col">
+    <div className="w-64 bg-card border-r border-border h-full flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center space-x-3">
@@ -67,7 +76,7 @@ const Sidebar = () => {
             return (
               <li key={item.href}>
                 <button
-                  onClick={() => setActiveItem(item.href)}
+                  onClick={() => handleItemClick(item.href)}
                   className={cn(
                     "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-all duration-200",
                     isActive 

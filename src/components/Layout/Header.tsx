@@ -12,7 +12,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 
-const Header = () => {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
   const { toast } = useToast();
   const [isDark, setIsDark] = React.useState(false);
@@ -34,11 +38,16 @@ const Header = () => {
     <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6">
       {/* Left side - Search */}
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="lg:hidden"
+          onClick={onMenuClick}
+        >
           <Menu className="w-5 h-5" />
         </Button>
         
-        <div className="relative w-80 hidden md:block">
+        <div className="relative w-64 xl:w-80 hidden md:block">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search properties, tenants, invoices..."
@@ -48,21 +57,21 @@ const Header = () => {
       </div>
 
       {/* Right side - Actions */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 sm:space-x-4">
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative hidden sm:flex">
           <Bell className="w-5 h-5" />
           <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full text-xs"></span>
         </Button>
 
         {/* Theme Toggle */}
-        <Button variant="ghost" size="icon" onClick={toggleTheme}>
+        <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
 
         {/* User Menu */}
-        <div className="flex items-center space-x-3 pl-4 border-l border-border">
-          <div className="text-right hidden md:block">
+        <div className="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-4 border-l border-border">
+          <div className="text-right hidden lg:block">
             <p className="text-sm font-medium">{user?.username}</p>
             <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
           </div>

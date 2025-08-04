@@ -150,26 +150,26 @@ const LandlordDashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {statsCards.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <Card key={index} className="overflow-hidden hover:shadow-card transition-all duration-300">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-muted-foreground">
                       {stat.title}
                     </p>
-                    <p className="text-2xl font-bold mt-2">
+                    <p className="text-xl sm:text-2xl font-bold mt-2 truncate">
                       {stat.value}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {stat.description}
                     </p>
                   </div>
-                  <div className={`w-12 h-12 rounded-lg ${stat.color} flex items-center justify-center`}>
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${stat.color} flex items-center justify-center flex-shrink-0`}>
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
               </CardContent>
@@ -179,7 +179,7 @@ const LandlordDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
@@ -188,28 +188,28 @@ const LandlordDashboard = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center space-x-3 p-3 bg-secondary/50 rounded-lg">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <div className="flex-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium">Payment received</p>
-                  <p className="text-xs text-muted-foreground">House 12A - KES 45,000</p>
+                  <p className="text-xs text-muted-foreground truncate">House 12A - KES 45,000</p>
                 </div>
-                <span className="text-xs text-muted-foreground">2 hours ago</span>
+                <span className="text-xs text-muted-foreground hidden sm:block">2 hours ago</span>
               </div>
               <div className="flex items-center space-x-3 p-3 bg-secondary/50 rounded-lg">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <div className="flex-1">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></div>
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium">Maintenance request</p>
-                  <p className="text-xs text-muted-foreground">House 8B - Plumbing issue</p>
+                  <p className="text-xs text-muted-foreground truncate">House 8B - Plumbing issue</p>
                 </div>
-                <span className="text-xs text-muted-foreground">5 hours ago</span>
+                <span className="text-xs text-muted-foreground hidden sm:block">5 hours ago</span>
               </div>
               <div className="flex items-center space-x-3 p-3 bg-secondary/50 rounded-lg">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div className="flex-1">
+                <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium">New tenant</p>
-                  <p className="text-xs text-muted-foreground">House 15C - John Doe</p>
+                  <p className="text-xs text-muted-foreground truncate">House 15C - John Doe</p>
                 </div>
-                <span className="text-xs text-muted-foreground">1 day ago</span>
+                <span className="text-xs text-muted-foreground hidden sm:block">1 day ago</span>
               </div>
             </div>
           </CardContent>
@@ -223,22 +223,22 @@ const LandlordDashboard = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center space-x-3 p-3 border border-red-200 bg-red-50 rounded-lg">
-                <AlertTriangle className="w-4 h-4 text-red-500" />
-                <div className="flex-1">
+                <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-red-700">Overdue Rent</p>
                   <p className="text-xs text-red-600">3 tenants have overdue payments</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3 p-3 border border-yellow-200 bg-yellow-50 rounded-lg">
-                <FileText className="w-4 h-4 text-yellow-500" />
-                <div className="flex-1">
+                <FileText className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-yellow-700">Generate Invoices</p>
                   <p className="text-xs text-yellow-600">Monthly invoices for January</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3 p-3 border border-blue-200 bg-blue-50 rounded-lg">
-                <Building className="w-4 h-4 text-blue-500" />
-                <div className="flex-1">
+                <Building className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-blue-700">Vacant Units</p>
                   <p className="text-xs text-blue-600">{stats.totalUnits - stats.occupiedUnits} units available for rent</p>
                 </div>
