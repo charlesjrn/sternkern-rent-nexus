@@ -7,6 +7,8 @@ import LandlordDashboard from '@/components/Dashboard/LandlordDashboard';
 const Index = () => {
   const { user, loading } = useAuth();
 
+  console.log('Index: user=', user, 'loading=', loading);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-hero">

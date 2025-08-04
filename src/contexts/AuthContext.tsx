@@ -31,11 +31,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Check for existing session on mount
   useEffect(() => {
+    console.log('AuthContext: Checking for stored user...');
     const storedUser = localStorage.getItem('sternkern-user');
     if (storedUser) {
+      console.log('AuthContext: Found stored user:', JSON.parse(storedUser));
       setUser(JSON.parse(storedUser));
+    } else {
+      console.log('AuthContext: No stored user found');
     }
     setLoading(false);
+    console.log('AuthContext: Loading complete');
   }, []);
 
   const login = async (username: string, password: string) => {
