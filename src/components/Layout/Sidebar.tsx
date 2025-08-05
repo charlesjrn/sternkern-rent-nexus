@@ -48,8 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
 
   const handleItemClick = (href: string) => {
     setActiveItem(href);
-    window.location.href = href; // Simple navigation for now
-    if (onClose) onClose(); // Close mobile sidebar when item is clicked
+    window.location.href = href;
+    if (onClose) onClose();
   };
 
   return (

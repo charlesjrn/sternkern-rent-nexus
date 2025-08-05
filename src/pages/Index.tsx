@@ -1,9 +1,9 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+
 import LoginForm from '@/components/LoginForm';
 import DashboardLayout from '@/components/Layout/DashboardLayout';
 import LandlordDashboard from '@/components/Dashboard/LandlordDashboard';
-import Inventory from './Inventory';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -25,37 +25,21 @@ const Index = () => {
     return <LoginForm />;
   }
 
-  // Simple routing based on pathname
-  const path = window.location.pathname;
-  
-  const renderContent = () => {
-    switch (path) {
-      case '/inventory':
-        return <Inventory />;
-      default:
-        return (
-          <>
-            {user.role === 'landlord' && <LandlordDashboard />}
-            {user.role === 'caretaker' && (
-              <div className="text-center py-20">
-                <h1 className="text-2xl font-bold mb-4">Caretaker Dashboard</h1>
-                <p className="text-muted-foreground">View-only access to property information</p>
-              </div>
-            )}
-            {user.role === 'tenant' && (
-              <div className="text-center py-20">
-                <h1 className="text-2xl font-bold mb-4">Tenant Portal</h1>
-                <p className="text-muted-foreground">View your invoices and submit maintenance requests</p>
-              </div>
-            )}
-          </>
-        );
-    }
-  };
-
   return (
     <DashboardLayout>
-      {renderContent()}
+      {user.role === 'landlord' && <LandlordDashboard />}
+      {user.role === 'caretaker' && (
+        <div className="text-center py-20">
+          <h1 className="text-2xl font-bold mb-4">Caretaker Dashboard</h1>
+          <p className="text-muted-foreground">View-only access to property information</p>
+        </div>
+      )}
+      {user.role === 'tenant' && (
+        <div className="text-center py-20">
+          <h1 className="text-2xl font-bold mb-4">Tenant Portal</h1>
+          <p className="text-muted-foreground">View your invoices and submit maintenance requests</p>
+        </div>
+      )}
     </DashboardLayout>
   );
 };
