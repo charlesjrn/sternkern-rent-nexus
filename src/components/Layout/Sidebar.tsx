@@ -9,7 +9,8 @@ import {
   BarChart3, 
   Home,
   Settings,
-  Zap
+  Zap,
+  Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -21,9 +22,10 @@ interface NavItem {
 }
 
 const navigationItems: NavItem[] = [
-  { label: 'Dashboard', icon: Home, href: '/dashboard', roles: ['landlord', 'caretaker', 'tenant'] },
+  { label: 'Dashboard', icon: Home, href: '/', roles: ['landlord', 'caretaker', 'tenant'] },
   { label: 'Units', icon: Building, href: '/units', roles: ['landlord', 'caretaker'] },
   { label: 'Tenants', icon: Users, href: '/tenants', roles: ['landlord', 'caretaker'] },
+  { label: 'Inventory', icon: Package, href: '/inventory', roles: ['landlord', 'caretaker'] },
   { label: 'Invoices', icon: FileText, href: '/invoices', roles: ['landlord', 'caretaker', 'tenant'] },
   { label: 'Utilities', icon: Zap, href: '/utilities', roles: ['landlord', 'caretaker'] },
   { label: 'Maintenance', icon: Wrench, href: '/maintenance', roles: ['landlord', 'caretaker', 'tenant'] },
@@ -38,7 +40,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const { user } = useAuth();
-  const [activeItem, setActiveItem] = React.useState('/dashboard');
+  const [activeItem, setActiveItem] = React.useState(window.location.pathname);
 
   const filteredItems = navigationItems.filter(item => 
     item.roles.includes(user?.role || '')
@@ -46,6 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
 
   const handleItemClick = (href: string) => {
     setActiveItem(href);
+    window.location.href = href; // Simple navigation for now
     if (onClose) onClose(); // Close mobile sidebar when item is clicked
   };
 
