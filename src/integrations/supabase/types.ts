@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      inventory: {
+        Row: {
+          condition: string | null
+          created_at: string | null
+          house_number: string | null
+          id: number
+          item_category: string
+          item_name: string
+          notes: string | null
+          purchase_date: string | null
+          purchase_price: number | null
+          quantity: number
+          updated_at: string | null
+          warranty_expiry: string | null
+        }
+        Insert: {
+          condition?: string | null
+          created_at?: string | null
+          house_number?: string | null
+          id?: number
+          item_category: string
+          item_name: string
+          notes?: string | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          quantity?: number
+          updated_at?: string | null
+          warranty_expiry?: string | null
+        }
+        Update: {
+          condition?: string | null
+          created_at?: string | null
+          house_number?: string | null
+          id?: number
+          item_category?: string
+          item_name?: string
+          notes?: string | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          quantity?: number
+          updated_at?: string | null
+          warranty_expiry?: string | null
+        }
+        Relationships: []
+      }
       invoices: {
         Row: {
           billing_month: string | null
