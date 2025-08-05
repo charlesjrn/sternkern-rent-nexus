@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </Button>
 
         {/* Theme Toggle */}
-        <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden sm:flex">
+        <Button variant="ghost" size="icon" onClick={toggleTheme}>
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
 

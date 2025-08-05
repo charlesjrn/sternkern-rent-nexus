@@ -45,6 +45,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string) => {
     try {
+      console.log('AuthContext: Attempting login with:', { username, password });
+      
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -52,7 +54,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('password', password)
         .single();
 
+      console.log('AuthContext: Supabase response:', { data, error });
+
       if (error || !data) {
+        console.log('AuthContext: Login failed - no data or error:', error);
         return { success: false, error: 'Invalid username or password' };
       }
 
