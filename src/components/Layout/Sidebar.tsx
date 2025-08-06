@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Building, 
   Users, 
@@ -40,15 +41,16 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const { user } = useAuth();
-  const [activeItem, setActiveItem] = React.useState(window.location.pathname);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const activeItem = location.pathname;
 
   const filteredItems = navigationItems.filter(item => 
     item.roles.includes(user?.role || '')
   );
 
   const handleItemClick = (href: string) => {
-    setActiveItem(href);
-    window.location.href = href;
+    navigate(href);
     if (onClose) onClose();
   };
 
