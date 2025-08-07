@@ -106,7 +106,7 @@ const Inventory = () => {
         purchase_price: formData.purchase_price ? parseFloat(formData.purchase_price) : null,
         purchase_date: formData.purchase_date || null,
         warranty_expiry: formData.warranty_expiry || null,
-        house_number: formData.house_number || null
+        house_number: formData.house_number === 'none' ? null : formData.house_number || null
       };
 
       if (editingItem) {
@@ -151,7 +151,7 @@ const Inventory = () => {
     setFormData({
       item_name: item.item_name,
       item_category: item.item_category,
-      house_number: item.house_number || '',
+      house_number: item.house_number || 'none',
       quantity: item.quantity,
       condition: item.condition || 'Good',
       purchase_date: item.purchase_date || '',
@@ -192,7 +192,7 @@ const Inventory = () => {
     setFormData({
       item_name: '',
       item_category: '',
-      house_number: '',
+      house_number: 'none',
       quantity: 1,
       condition: 'Good',
       purchase_date: '',
@@ -290,7 +290,7 @@ const Inventory = () => {
                       <SelectValue placeholder="Select house" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">No specific house</SelectItem>
+                      <SelectItem value="none">No specific house</SelectItem>
                       {houses.map(house => (
                         <SelectItem key={house} value={house}>{house}</SelectItem>
                       ))}
