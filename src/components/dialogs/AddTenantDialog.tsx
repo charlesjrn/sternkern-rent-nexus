@@ -6,9 +6,15 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
-const AddTenantDialog: React.FC = () => {
+interface AddTenantDialogProps {
+  onSuccess?: () => void;
+}
+
+const AddTenantDialog: React.FC<AddTenantDialogProps> = ({ onSuccess }) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -19,15 +25,40 @@ const AddTenantDialog: React.FC = () => {
   });
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add to database
-    toast({
-      title: "Tenant Added",
-      description: `${formData.name} has been added successfully.`
-    });
-    setOpen(false);
-    setFormData({ name: '', phone: '', email: '', unit: '', leaseStart: '', idNumber: '' });
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase
+        .from('tenants')
+        .insert([{
+          tenant_name: formData.name,
+          contact_number: formData.phone,
+          email: formData.email,
+          house_number: formData.unit
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Tenant Added",
+        description: `${formData.name} has been added successfully.`
+      });
+      
+      setOpen(false);
+      setFormData({ name: '', phone: '', email: '', unit: '', leaseStart: '', idNumber: '' });
+      onSuccess?.();
+    } catch (error) {
+      console.error('Error adding tenant:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add tenant. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -107,7 +138,9 @@ const AddTenantDialog: React.FC = () => {
             />
           </div>
           <DialogFooter>
-            <Button type="submit">Add Tenant</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Adding...' : 'Add Tenant'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

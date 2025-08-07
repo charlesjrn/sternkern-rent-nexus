@@ -6,9 +6,15 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
-const AddUnitDialog: React.FC = () => {
+interface AddUnitDialogProps {
+  onSuccess?: () => void;
+}
+
+const AddUnitDialog: React.FC<AddUnitDialogProps> = ({ onSuccess }) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     houseNumber: '',
     bedrooms: '',
@@ -17,15 +23,40 @@ const AddUnitDialog: React.FC = () => {
   });
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add to database
-    toast({
-      title: "Unit Added",
-      description: `Unit ${formData.houseNumber} has been added successfully.`
-    });
-    setOpen(false);
-    setFormData({ houseNumber: '', bedrooms: '', rentAmount: '', status: 'Unoccupied' });
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase
+        .from('units')
+        .insert([{
+          house_number: formData.houseNumber,
+          bedrooms: parseInt(formData.bedrooms),
+          rent_amount: parseFloat(formData.rentAmount),
+          occupancy_status: formData.status
+        }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Unit Added",
+        description: `Unit ${formData.houseNumber} has been added successfully.`
+      });
+      
+      setOpen(false);
+      setFormData({ houseNumber: '', bedrooms: '', rentAmount: '', status: 'Unoccupied' });
+      onSuccess?.();
+    } catch (error) {
+      console.error('Error adding unit:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add unit. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -80,7 +111,9 @@ const AddUnitDialog: React.FC = () => {
             />
           </div>
           <DialogFooter>
-            <Button type="submit">Add Unit</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Adding...' : 'Add Unit'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
