@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Zap, Droplets, Trash2, Plus } from 'lucide-react';
+import BackButton from '@/components/Layout/BackButton';
 
 const Utilities = () => {
   const utilities = [
@@ -36,6 +37,7 @@ const Utilities = () => {
 
   return (
     <div className="space-y-6">
+      <BackButton />
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Utilities Management</h1>

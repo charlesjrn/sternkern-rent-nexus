@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import DashboardLayout from "@/components/Layout/DashboardLayout";
 import Index from "./pages/Index";
 import Inventory from "./pages/Inventory";
 import Units from "./pages/Units";
@@ -27,15 +28,15 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/units" element={<Units />} />
-            <Route path="/tenants" element={<Tenants />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/invoices" element={<Invoices />} />
-            <Route path="/utilities" element={<Utilities />} />
-            <Route path="/maintenance" element={<Maintenance />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/units" element={<DashboardLayout><Units /></DashboardLayout>} />
+            <Route path="/tenants" element={<DashboardLayout><Tenants /></DashboardLayout>} />
+            <Route path="/inventory" element={<DashboardLayout><Inventory /></DashboardLayout>} />
+            <Route path="/invoices" element={<DashboardLayout><Invoices /></DashboardLayout>} />
+            <Route path="/utilities" element={<DashboardLayout><Utilities /></DashboardLayout>} />
+            <Route path="/maintenance" element={<DashboardLayout><Maintenance /></DashboardLayout>} />
+            <Route path="/payments" element={<DashboardLayout><Payments /></DashboardLayout>} />
+            <Route path="/reports" element={<DashboardLayout><Reports /></DashboardLayout>} />
+            <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

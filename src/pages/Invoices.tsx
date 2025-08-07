@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { FileText, Calendar, DollarSign, Plus } from 'lucide-react';
+import BackButton from '@/components/Layout/BackButton';
 
 const Invoices = () => {
   const invoices = [
@@ -37,6 +38,7 @@ const Invoices = () => {
 
   return (
     <div className="space-y-6">
+      <BackButton />
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Invoices Management</h1>
