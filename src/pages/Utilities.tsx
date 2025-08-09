@@ -5,7 +5,7 @@ import { Zap, Droplets, Trash2 } from 'lucide-react';
 import BackButton from '@/components/Layout/BackButton';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import AddUtilityDialog from '@/components/dialogs/AddUtilityDialog';
+
 
 interface UtilityRec {
   id: number;
@@ -25,7 +25,10 @@ const Utilities = () => {
 
   const fetchUtilities = async () => {
     try {
-      const { data, error } = await supabase.from('utilities').select('*').order('billing_month', { ascending: false });
+      const { data, error } = await supabase
+        .from('invoices')
+        .select('id, house_number, tenant_name, electricity, water, garbage, other_utilities, billing_month')
+        .order('billing_month', { ascending: false });
       if (error) throw error;
       setUtilities(data || []);
     } catch (err) {
@@ -48,7 +51,6 @@ const Utilities = () => {
           <h1 className="text-3xl font-bold">Utilities Management</h1>
           <p className="text-muted-foreground">Track and manage utility costs for each unit</p>
         </div>
-        <AddUtilityDialog onSuccess={fetchUtilities} />
       </div>
 
       {loading ? (

@@ -23,23 +23,45 @@ const AddTenantDialog: React.FC<AddTenantDialogProps> = ({ onSuccess }) => {
     leaseStart: '',
     idNumber: ''
   });
-  const { toast } = useToast();
+const { toast } = useToast();
+const [availableUnits, setAvailableUnits] = useState<string[]>([]);
+
+React.useEffect(() => {
+  const loadUnits = async () => {
+    const { data, error } = await supabase
+      .from('units')
+      .select('house_number')
+      .eq('occupancy_status', 'Unoccupied')
+      .order('house_number', { ascending: true });
+    if (!error) {
+      setAvailableUnits((data || []).map(u => u.house_number).filter(Boolean) as string[]);
+    }
+  };
+  loadUnits();
+}, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const { error } = await supabase
+      // Insert tenant
+      const { error: insertError } = await supabase
         .from('tenants')
-        .insert([{
+        .insert([{ 
           tenant_name: formData.name,
           contact_number: formData.phone,
           email: formData.email,
           house_number: formData.unit
         }]);
+      if (insertError) throw insertError;
 
-      if (error) throw error;
+      // Mark unit as occupied
+      const { error: unitError } = await supabase
+        .from('units')
+        .update({ occupancy_status: 'Occupied' })
+        .eq('house_number', formData.unit);
+      if (unitError) throw unitError;
 
       toast({
         title: "Tenant Added",
@@ -120,10 +142,13 @@ const AddTenantDialog: React.FC<AddTenantDialogProps> = ({ onSuccess }) => {
                 <SelectValue placeholder="Select unit" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="A1">A1</SelectItem>
-                <SelectItem value="A2">A2</SelectItem>
-                <SelectItem value="B1">B1</SelectItem>
-                <SelectItem value="B2">B2</SelectItem>
+                {availableUnits.length === 0 ? (
+                  <div className="p-2 text-sm text-muted-foreground">No vacant units</div>
+                ) : (
+                  availableUnits.map((hn) => (
+                    <SelectItem key={hn} value={hn}>{hn}</SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>

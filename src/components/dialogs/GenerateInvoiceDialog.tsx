@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Plus } from 'lucide-react';
@@ -27,12 +28,38 @@ const GenerateInvoiceDialog: React.FC<GenerateInvoiceDialogProps> = ({ mode, onS
     other_utilities: '',
     billing_month: new Date().toISOString().slice(0, 10)
   });
+  const [houses, setHouses] = useState<{ house_number: string; tenant_name: string | null }[]>([]);
 
   useEffect(() => {
     if (!open) {
       setFormData({ tenant_name: '', house_number: '', rent_amount: '', electricity: '', water: '', garbage: '', other_utilities: '', billing_month: new Date().toISOString().slice(0, 10) });
+      return;
     }
+    const load = async () => {
+      const { data } = await supabase.from('tenants').select('tenant_name, house_number').order('tenant_name', { ascending: true });
+      setHouses(data || []);
+    };
+    load();
   }, [open]);
+
+  useEffect(() => {
+    const applyPrefill = async () => {
+      if (!formData.house_number) return;
+      const match = houses.find((h) => h.house_number === formData.house_number);
+      const { data: unit } = await supabase
+        .from('units')
+        .select('rent_amount')
+        .eq('house_number', formData.house_number)
+        .maybeSingle();
+      setFormData((prev) => ({
+        ...prev,
+        tenant_name: match?.tenant_name || '',
+        rent_amount: unit?.rent_amount != null ? String(unit.rent_amount) : prev.rent_amount,
+      }));
+    };
+    applyPrefill();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.house_number]);
 
   const generateSingle = async () => {
     const payload = {
@@ -119,11 +146,22 @@ const GenerateInvoiceDialog: React.FC<GenerateInvoiceDialogProps> = ({ mode, onS
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="tenant_name">Tenant Name</Label>
-                  <Input id="tenant_name" value={formData.tenant_name} onChange={(e) => setFormData({ ...formData, tenant_name: e.target.value })} />
+                  <Input id="tenant_name" value={formData.tenant_name} disabled placeholder="Auto-filled" />
                 </div>
                 <div>
                   <Label htmlFor="house_number">House Number</Label>
-                  <Input id="house_number" value={formData.house_number} onChange={(e) => setFormData({ ...formData, house_number: e.target.value })} />
+                  <Select value={formData.house_number} onValueChange={(v) => setFormData({ ...formData, house_number: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select occupied unit" /></SelectTrigger>
+                    <SelectContent>
+                      {houses.length === 0 ? (
+                        <div className="p-2 text-sm text-muted-foreground">No occupied units</div>
+                      ) : (
+                        houses.map((h) => (
+                          <SelectItem key={h.house_number} value={h.house_number}>{h.house_number}</SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

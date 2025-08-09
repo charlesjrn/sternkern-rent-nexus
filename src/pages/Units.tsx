@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Building, Users, DollarSign } from 'lucide-react';
 import BackButton from '@/components/Layout/BackButton';
 import AddUnitDialog from '@/components/dialogs/AddUnitDialog';
+import ViewUnitDialog from '@/components/dialogs/ViewUnitDialog';
+import EditUnitDialog from '@/components/dialogs/EditUnitDialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -100,12 +102,8 @@ const Units = () => {
               </div>
               
               <div className="flex space-x-2 pt-2">
-                <Button variant="outline" size="sm" className="flex-1">
-                  View Details
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1">
-                  Edit
-                </Button>
+                <ViewUnitDialog unit={unit} />
+                <EditUnitDialog unit={unit} onSuccess={fetchUnits} />
               </div>
             </CardContent>
           </Card>

@@ -61,6 +61,8 @@ export type Database = {
       }
       invoices: {
         Row: {
+          amount_due: number
+          amount_paid: number
           billing_month: string | null
           date_generated: string | null
           electricity: number | null
@@ -76,6 +78,8 @@ export type Database = {
           water: number | null
         }
         Insert: {
+          amount_due?: number
+          amount_paid?: number
           billing_month?: string | null
           date_generated?: string | null
           electricity?: number | null
@@ -91,6 +95,8 @@ export type Database = {
           water?: number | null
         }
         Update: {
+          amount_due?: number
+          amount_paid?: number
           billing_month?: string | null
           date_generated?: string | null
           electricity?: number | null
@@ -358,7 +364,10 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      recompute_invoices_for_house: {
+        Args: { p_house: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
