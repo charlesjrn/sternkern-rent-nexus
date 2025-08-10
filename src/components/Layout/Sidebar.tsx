@@ -11,7 +11,8 @@ import {
   Home,
   Settings,
   Zap,
-  Package
+  Package,
+  DollarSign
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +32,7 @@ const navigationItems: NavItem[] = [
   { label: 'Utilities', icon: Zap, href: '/utilities', roles: ['landlord', 'caretaker'] },
   { label: 'Maintenance', icon: Wrench, href: '/maintenance', roles: ['landlord', 'caretaker', 'tenant'] },
   { label: 'Payments', icon: CreditCard, href: '/payments', roles: ['landlord', 'caretaker', 'tenant'] },
+  { label: 'Rent Data', icon: DollarSign, href: '/rent-data', roles: ['landlord', 'caretaker'] },
   { label: 'Reports', icon: BarChart3, href: '/reports', roles: ['landlord'] },
   { label: 'Settings', icon: Settings, href: '/settings', roles: ['landlord'] },
 ];
